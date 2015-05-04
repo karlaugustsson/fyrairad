@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FyraIrad", "FyraIrad\FyraIrad.csproj", "{4D337137-8ADD-44D4-85CE-61B74D6B1A3A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4D337137-8ADD-44D4-85CE-61B74D6B1A3A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4D337137-8ADD-44D4-85CE-61B74D6B1A3A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4D337137-8ADD-44D4-85CE-61B74D6B1A3A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4D337137-8ADD-44D4-85CE-61B74D6B1A3A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
