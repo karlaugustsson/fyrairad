@@ -8,7 +8,7 @@ namespace FyraIrad
 {
     class GameBoard
     {
-        static Dictionary<int,int> AvaiablePositions = new Dictionary<int,int>();
+        static Dictionary<int, int> AvaiablePositions = new Dictionary<int, int>();
         static int heigth = 6;
         static int width = 7;
 
@@ -21,15 +21,16 @@ namespace FyraIrad
         {
             FirstPlayer = player1;
             SecondPlayer = player2;
-            AvaiablePositions = new Dictionary<int,int>();
+            AvaiablePositions = new Dictionary<int, int>();
             DrawGrid();
+            DrawScoreBoard();
 
             for (var i = 1; i <= width; i++)
             {
 
                 for (var q = 1; q <= heigth; q++)
                 {
-                    AvaiablePositions.Add(Convert.ToInt32(string.Format("{0}{1}", i, q)),0);
+                    AvaiablePositions.Add(Convert.ToInt32(string.Format("{0}{1}", i, q)), 0);
 
                 }
 
@@ -39,58 +40,56 @@ namespace FyraIrad
             }
 
 
-            
+
 
             var WhosTurn = rnd.Next(0, 2);
-            while (GameOver == false) {
+            while (GameOver == false)
+            {
                 var whereToPutCoin = MoveCursor();
-               
-                if (GameOver == true)
-                {
-                    Console.WriteLine("aaa");
-                    break;
-                }
-   
-                    while (MakeMove(FirstPlayer, whereToPutCoin) == false)
-                    {
-                        whereToPutCoin = MoveCursor();
-                        MakeMove(FirstPlayer, whereToPutCoin);
-                    }
-                    Console.WriteLine("Player1 done");
-              
+
                 if (GameOver == true)
                 {
                     break;
                 }
+
+                while (MakeMove(FirstPlayer, whereToPutCoin) == false)
+                {
                     whereToPutCoin = MoveCursor();
-                    while (MakeMove(SecondPlayer, whereToPutCoin) == false)
-                    {
-                        whereToPutCoin = MoveCursor();
-                        MakeMove(SecondPlayer, whereToPutCoin);
 
-                    }
-                    Console.WriteLine("Player2 done");
-                
-               
+                }
 
-                
+
+                if (GameOver == true)
+                {
+                    break;
+                }
+                whereToPutCoin = MoveCursor();
+                while (MakeMove(SecondPlayer, whereToPutCoin) == false)
+                {
+                    whereToPutCoin = MoveCursor();
+
+
+                }
+
             }
 
-
-             
-                
-  
-
-     
-
-            
-
-
-            
-            
+            DrawScoreBoard();
+            Console.BackgroundColor = ConsoleColor.Black;
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.SetCursorPosition(1, 60);
 
 
 
+
+
+
+        }
+        private void DrawScoreBoard(){
+
+            Console.SetCursorPosition(70, 2);
+            Console.WriteLine("{0}:{1}\r\n", FirstPlayer.Name, FirstPlayer.TotalWins);
+            Console.SetCursorPosition(70, 4);
+            Console.WriteLine("{0}:{1}\r\n", SecondPlayer.Name, SecondPlayer.TotalWins);
         }
 
         private void DrawGrid()
@@ -150,6 +149,7 @@ namespace FyraIrad
                         break;
 
                     case ConsoleKey.Enter:
+                        DrawCursor(y, true);
                         return y;
 
                 }
@@ -180,49 +180,201 @@ namespace FyraIrad
 
 
         }
+        private void ShowData()
+        {
+            Console.Clear();
+            foreach (var item in AvaiablePositions)
+            {
+                Console.WriteLine("{0} : {1}", item.Key, item.Value);
+
+            }
+
+        }
+        private void DrawBlock(ConsoleColor Color, int x, int y)
+        {
+            var ypos = (heigth * heigth + 1) - (y * 5);
+            var xpos = (width * x + 1);
+            for (int q = ypos; q < ypos + 4; q++)
+            {
+                for (int i = xpos; i < xpos + 6; i++)
+                {
+                    Console.SetCursorPosition(i, q);
+                    Console.BackgroundColor = Color;
+                    Console.ForegroundColor = Color;
+                    Console.Write("x");
+                }
+                Console.WriteLine("\r");
+            }
+
+
+
+
+
+
+        }
         private bool MakeMove(Player player, int Location)
         {
-            
-            for (var i = 1; i < 7; i++) {
-               var number = Convert.ToInt32(string.Format("{0}{1}", Location, i));
-               Console.SetCursorPosition(0, 0);
-   
-                if(AvaiablePositions[number] == 0){
-                AvaiablePositions[number] = player.Id;
-                var Winning = CheckForWinningMove(player.Id,number);
-                if (Winning == true) {
-                    GameOver = true;
+
+            for (var i = 1; i < 7; i++)
+            {
+                var number = Convert.ToInt32(string.Format("{0}{1}", Location, i));
+                Console.SetCursorPosition(0, 0);
+
+                if (AvaiablePositions[number] == 0)
+                {
+                    AvaiablePositions[number] = player.Id;
+                    DrawBlock(player.Color, Location, i);
+                    var Winning = CheckForWinningMove(player.Id, number);
+
+                    if (Winning == true)
+                    {
+                        GameOver = true;
+                        player.TotalWins += 1;
+
+
+
+                    }
+
+                    return true;
+
                 }
-                return true;
-            
-            }
             }
             return false;
-            
+
         }
-        public bool CheckForWinningMove(int Id,int Number) {
-                var Counter = 1;
-                while (AvaiablePositions.ContainsKey(Number))
+        public bool CheckForWinningMove(int Id, int Number)
+        {
+            Console.BackgroundColor = ConsoleColor.Black;
+            Console.ForegroundColor = ConsoleColor.White;
+
+            var TempNumber = Number;
+
+            while (AvaiablePositions.ContainsKey(TempNumber))
+            {
+                TempNumber++;
+            }
+            TempNumber -= 1;
+
+            var Victory = FinderLoop(TempNumber, Id, 1, false);
+            if (Victory == true)
+            {
+                return true;
+            }
+
+
+
+
+            TempNumber = Number;
+
+            while (AvaiablePositions.ContainsKey(TempNumber))
+            {
+                TempNumber += 10;
+            }
+            TempNumber -= 10;
+
+            Victory = FinderLoop(TempNumber, Id, 10, false);
+            if (Victory == true)
+            {
+                return true;
+            }
+
+            TempNumber = 16;
+
+            while (TempNumber >= 11)
+            {
+                Victory = FinderLoop(TempNumber, Id, 11, true);
+
+                if (Victory == true)
                 {
-                    if (Counter == 4)
-                    {
-
-                        return true;
-                    }
-
-                    if (AvaiablePositions[Number] == Id)
-                    {
-                        
-                        Counter++;
-                        Console.WriteLine(Counter);
-                    }
-    
-
-                    Number = Number  - 1;
+                    return true;
                 }
-                
-                    return false;
+                TempNumber -= 1;
+            }
+            TempNumber = 11;
+
+
+            while (TempNumber <= 71)
+            {
+                Victory = FinderLoop(TempNumber, Id,11, true);
+
+                if (Victory == true)
+                {
+                    return true;
+                }
+                TempNumber += 10;
             }
             
+            TempNumber = 76;
+
+
+            while (TempNumber >= 71)
+            {
+                Victory = FinderLoop(TempNumber, Id, 9, false);
+
+                if (Victory == true)
+                {
+                    return true;
+                }
+                TempNumber -= 1;
+            }
+           
+            TempNumber = 61;
+            
+            while (TempNumber >= 11)
+            {
+                Victory = FinderLoop(TempNumber, Id, 9, false);
+
+                if (Victory == true)
+                {
+                    return true;
+                }
+                TempNumber -= 10;
+            }
+
+
+            return false;
+        }
+
+  
+        
+
+        
+
+        public bool FinderLoop(int value, int Id, int ActionValue, bool Action)
+        {
+
+            var Counter = 0;
+            while (AvaiablePositions.ContainsKey(value))
+            {
+                
+                if (AvaiablePositions[value] == Id)
+                {
+                    
+                    
+                    if (Counter == 3)
+                    {
+                        return true;
+
+                    }
+                    Counter++;
+                }
+                else
+                {
+
+                    Counter = 0;
+                }
+                if (Action == true)
+                {
+
+                    value += ActionValue;
+                }
+                else
+                {
+                    value -= ActionValue;
+                }
+            }
+            return false;
+
         }
     }
+}

@@ -11,9 +11,9 @@ namespace FyraIrad
         public string Name { get; set; }
         public static int IdCounter =1;
         public int Id {get;set;}
-        public string Color { get; set; }
-
-        public Player(string name,string color) {
+        public ConsoleColor Color { get; set; }
+        public int TotalWins = 0;
+        public Player(string name,ConsoleColor color) {
             
             Name = name;
 
