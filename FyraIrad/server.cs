@@ -18,7 +18,9 @@ namespace FyraIrad
             sct.Bind(new IPEndPoint(IPAddress.Parse("127.0.0.1"), 1234));
             sct.Listen(100);
 
+
             Socket accepted = sct.Accept();
+            
             Buffer = new byte[accepted.SendBufferSize];
             int BytesRead = accepted.Receive(Buffer);
             byte[] formated = new byte[BytesRead];
@@ -26,10 +28,17 @@ namespace FyraIrad
             {
                 formated[i] = Buffer[i];
             } string strData = Encoding.ASCII.GetString(formated);
+            
             Console.Write(strData + "\r\n");
-            Console.Read();
-            sct.Close();
-            accepted.Close();
+            Console.Write("Your name please: ");
+            string text = Console.ReadLine();
+
+            byte[] Data = Encoding.ASCII.GetBytes(text);
+            sct.Send(Data);
+    
+   
+            
         }
+
     }
 }

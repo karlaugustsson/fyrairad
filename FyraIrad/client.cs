@@ -11,11 +11,12 @@ namespace FyraIrad
     class client
     {
         static Socket sct;
+        static byte[] Buffer { get; set; }
 
         public static void ClientConnect()
         {
             sct = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            IPEndPoint LocalEndPoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 1234);
+            IPEndPoint LocalEndPoint = new IPEndPoint(0, 1234);
             try
             {
                 sct.Connect(LocalEndPoint);
@@ -23,15 +24,34 @@ namespace FyraIrad
             }
             catch
             {
+ 
+       
+            }
 
-                Console.Write("Unable to coonect to remote endpoint");
-            } Console.Write("enter text: ");
+        }
+
+        public static void ClientRequest(){
+            Console.Write("Your name please: ");
             string text = Console.ReadLine();
 
             byte[] Data = Encoding.ASCII.GetBytes(text);
             sct.Send(Data);
-            Console.WriteLine("DATA SEND \r\n"); Console.Read();
-            sct.Close();
+
+
+                Socket accepted = sct.Accept();
+
+                Buffer = new byte[accepted.SendBufferSize];
+                int BytesRead = accepted.Receive(Buffer);
+                byte[] formated = new byte[BytesRead];
+                for (int i = 0; i < BytesRead; i++)
+                {
+                    formated[i] = Buffer[i];
+                } string strData = Encoding.ASCII.GetString(formated);
+
+                Console.Write(strData + "\r\n");
+        
         }
+
+        
     }
 }
