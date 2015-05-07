@@ -10,9 +10,14 @@ namespace FyraIrad
         static void Main(string[] args)
         {
 
-            server.serverConnect();
+                Console.WindowHeight = 40;
+                Player player1 = new Player("karl", ConsoleColor.Blue);
+                Player player2 = new Player("Erik", ConsoleColor.Red);
+                while (true)
+	{
+	    var GameBoard = new GameBoard(player1,player2);     
+	}
                 
-                var GameBoard = new GameBoard(new Player("karl", ConsoleColor.Blue), new Player("Erik", ConsoleColor.Red));
             }
             
            

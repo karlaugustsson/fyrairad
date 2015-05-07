@@ -16,7 +16,7 @@ namespace FyraIrad
         public static void ClientConnect()
         {
             sct = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            IPEndPoint LocalEndPoint = new IPEndPoint(0, 1234);
+            IPEndPoint LocalEndPoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 1234);
             try
             {
                 sct.Connect(LocalEndPoint);
@@ -36,7 +36,7 @@ namespace FyraIrad
 
             byte[] Data = Encoding.ASCII.GetBytes(text);
             sct.Send(Data);
-
+            while (true) {
 
                 Socket accepted = sct.Accept();
 
@@ -49,6 +49,11 @@ namespace FyraIrad
                 } string strData = Encoding.ASCII.GetString(formated);
 
                 Console.Write(strData + "\r\n");
+            
+            
+            }
+
+            sct.Close();
         
         }
 

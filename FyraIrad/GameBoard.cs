@@ -22,6 +22,7 @@ namespace FyraIrad
             FirstPlayer = player1;
             SecondPlayer = player2;
             AvaiablePositions = new Dictionary<int, int>();
+            Console.Clear();
             DrawGrid();
             DrawScoreBoard();
 
@@ -72,12 +73,14 @@ namespace FyraIrad
                 }
 
             }
-
+            Console.Clear();
             DrawScoreBoard();
+            
             Console.BackgroundColor = ConsoleColor.Black;
             Console.ForegroundColor = ConsoleColor.White;
-            Console.SetCursorPosition(1, 60);
-
+            Console.SetCursorPosition(1, 30);
+            Console.WriteLine("Game over!");
+            Console.Read();
 
 
 
